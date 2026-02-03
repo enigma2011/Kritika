@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Love</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #fdf2f8; /* Soft Pink */
+            --accent: #db2777;   /* Deep Pink */
+            --text: #4a044e;     /* Dark Purple */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Playfair Display', serif;
+            overflow-x: hidden;
+            color: var(--text);
+        }
+
+        /* Floating Hearts Background */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        /* Intro Section */
+        .intro {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: var(--accent);
+            margin: 0;
+            opacity: 0; /* Hidden initially */
+            transform: translateY(30px);
+        }
+
+        p.subtitle {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* The Gallery Section */
+        .gallery-container {
+            position: relative;
+            padding-bottom: 20vh; /* Space at bottom */
+        }
+
+        .card-wrapper {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: sticky;
+            top: 0;
+        }
+
+        .card {
+            width: 350px;
+            height: 500px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            transform: rotate(0deg);
+            position: absolute;
+            opacity: 0;
+            transform: translateY(100px) scale(0.8);
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 75%;
+            background-color: #eee;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .card-text {
+            height: 25%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-text h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            margin: 0;
+            color: var(--accent);
+        }
+
+        .card-text p {
+            font-size: 0.9rem;
+            margin: 5px 0 0 0;
+            line-height: 1.4;
+        }
+
+        /* Final Message */
+        .outro {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--text);
+            color: white;
+            text-align: center;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Music Button */
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Player (Hidden) -->
+    <audio id="bg-music" loop>
+        <!-- REPLACE THIS WITH A LINK TO HER FAVORITE SONG MP3 -->
+        <!-- Example: <source src="song.mp3" type="audio/mpeg"> -->
+    </audio>
+    <button class="music-btn" onclick="toggleMusic()">🎵</button>
+
+    <!-- Background Hearts -->
+    <canvas class="hearts-bg" id="heartsCanvas"></canvas>
+
+    <!-- Section 1: Intro -->
+    <section class="intro">
+        <h1 id="intro-text">Happy Birthday, Laadli</h1>
+        <p class="subtitle" id="intro-sub">A little story about why I love you...</p>
+        <div class="scroll-indicator">Scroll Down ↓</div>
+    </section>
+
+    <!-- Section 2: The 8 Cards -->
+    <div class="gallery-container">
+        
+        <!-- Card 1 -->
+        <div class="card-wrapper">
+            <div class="card" id="card1">
+                <img src="1.jpeg" alt="Special" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Why You're Special</h3>
+                    <p>You have a way of lighting up every room you walk into. Your energy is pure magic.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card-wrapper">
+            <div class="card" id="card2">
+                <img src="2.jpeg" alt="Important" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Why You're Important</h3>
+                    <p>You are the anchor in my chaotic life. Without you, I'd be lost at sea.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card-wrapper">
+            <div class="card" id="card3">
+                <img src="3.jpeg" alt="Family" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Why You're Family</h3>
+                    <p>Home isn't a place anymore; it's wherever you are. You are my safe haven.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-wrapper">
+            <div class="card" id="card4">
+                <img src="4.jpeg" alt="Kindness" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Your Kindness</h3>
+                    <p>The way you care for others inspires me to be a better man every single day.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card-wrapper">
+            <div class="card" id="card5">
+                <img src="5.jpeg" alt="Smile" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Your Smile</h3>
+                    <p>It’s my favorite curve on your body. It cures my bad days instantly.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="card-wrapper">
+            <div class="card" id="card6">
+                <img src="6.jpeg" alt="Laugh" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Your Laugh</h3>
+                    <p>Hearing you laugh is the most beautiful melody I've ever heard.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="card-wrapper">
+            <div class="card" id="card7">
+                <img src="7.jpeg" alt="Memories" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Our Memories</h3>
+                    <p>Every moment with you is a treasure I keep locked in my heart.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="card-wrapper">
+            <div class="card" id="card8">
+                <img src="8.jpeg" alt="Forever" class="polaroid-img">
+                <div class="card-text">
+                    <h3>Forever & Always</h3>
+                    <p>I promise to love you today, tomorrow, and every day after that.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Section 3: Outro -->
+    <section class="outro">
+        <div>
+            <h1 style="color:white; opacity: 1;">I Love You</h1>
+            <p>Happy Birthday, Laadli.</p>
+        </div>
+    </section>
+
+    <script>
+        // Register GSAP Plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Intro Animation
+        gsap.to("#intro-text", { duration: 1.5, opacity: 1, y: 0, ease: "power3.out", delay: 0.5 });
+        gsap.to("#intro-sub", { duration: 1.5, opacity: 1, y: 0, ease: "power3.out", delay: 1 });
+
+        // 2. Card Stack Animation
+        // We select all cards
+        const cards = gsap.utils.toArray(".card");
+
+        cards.forEach((card, i) => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card.parentElement, // Trigger when the wrapper hits the view
+                    start: "top center",
+                    end: "bottom top",
+                    scrub: 1, // Smooth scraping effect
+                    toggleActions: "play reverse play reverse"
+                },
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                rotation: (i % 2 === 0 ? 3 : -3), // Slight rotation alternating left/right
+                ease: "power2.out"
+            });
+        });
+
+        // 3. Floating Hearts Background Logic (Pure JS)
+        const canvas = document.getElementById("heartsCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const hearts = [];
+        class Heart {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.speed = 1 + Math.random() * 2;
+                this.size = 5 + Math.random() * 10;
+                this.opacity = 0.5 + Math.random() * 0.5;
+            }
+            update() {
+                this.y -= this.speed;
+                if(this.y < -20) this.y = canvas.height + 20;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(219, 39, 119, ${this.opacity})`;
+                ctx.font = `${this.size}px serif`;
+                ctx.fillText("❤", this.x, this.y);
+            }
+        }
+
+        for(let i=0; i<30; i++) hearts.push(new Heart());
+
+        function animateHearts() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hearts.forEach(h => { h.update(); h.draw(); });
+            requestAnimationFrame(animateHearts);
+        }
+        animateHearts();
+
+        // Music Toggle
+        function toggleMusic() {
+            const music = document.getElementById("bg-music");
+            if (music.paused) {
+                music.play();
+                document.querySelector('.music-btn').innerText = "⏸";
+            } else {
+                music.pause();
+                document.querySelector('.music-btn').innerText = "🎵";
+            }
+        }
+    </script>
+</body>
+</html>
