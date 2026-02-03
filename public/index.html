@@ -175,6 +175,7 @@
     <audio id="bg-music" loop>
         <!-- REPLACE THIS WITH A LINK TO HER FAVORITE SONG MP3 -->
         <!-- Example: <source src="song.mp3" type="audio/mpeg"> -->
+        <source src="Zara-Zara-Piano.mp3" type="audio/mpeg">
     </audio>
     <button class="music-btn" onclick="toggleMusic()">🎵</button>
 
@@ -324,7 +325,6 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const hearts = [];
         class Heart {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -344,6 +344,7 @@
             }
         }
 
+        const hearts = [];
         for(let i=0; i<30; i++) hearts.push(new Heart());
 
         function animateHearts() {
@@ -364,6 +365,20 @@
                 document.querySelector('.music-btn').innerText = "🎵";
             }
         }
+
+        function startMusicOnce() {
+            const music = document.getElementById("bg-music");
+            music.volume = 0.5;
+            music.play().then(() => {
+                document.querySelector('.music-btn').innerText = "⏸";
+                window.removeEventListener('click', startMusicOnce);
+                window.removeEventListener('scroll', startMusicOnce);
+            }).catch(() => {
+            });
+        }
+
+        window.addEventListener('click', startMusicOnce);
+        window.addEventListener('scroll', startMusicOnce);
     </script>
 </body>
 </html>
